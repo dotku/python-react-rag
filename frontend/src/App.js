@@ -35,7 +35,7 @@ function App() {
     formData.append("file", file);
 
     try {
-      await axios.post(
+      const rsp = await axios.post(
         `${process.env.REACT_APP_FASTAPI_URL}/uploadfile/`,
         formData,
         {
@@ -44,7 +44,8 @@ function App() {
           },
         }
       );
-      alert("File uploaded and processed successfully.");
+      console.log(rsp);
+      setAnswer(rsp.data.answer);
     } catch (error) {
       console.error("There was an error uploading the file!", error);
     }
@@ -68,7 +69,11 @@ function App() {
           </Button>
         </div>
         <div className="flex gap-3 mb-3">
-          <Input type="file" onChange={handleFileChange} />
+          <Input
+            type="file"
+            onChange={handleFileChange}
+            accept=".txt,application/pdf"
+          />
           <Button onClick={handleFileUpload} className="w-[100px]">
             Upload File
           </Button>

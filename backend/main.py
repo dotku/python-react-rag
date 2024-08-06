@@ -24,12 +24,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Debug prints
-print(f"PINECONE_API_KEY: {os.getenv('PINECONE_API_KEY')}")
-print(f"PINECONE_ENVIRONMENT: {os.getenv('PINECONE_ENVIRONMENT')}")
-print(f"PINECONE_INDEX_NAME: {os.getenv('PINECONE_INDEX_NAME')}")
-print(f"OPENAI_API_KEY: {os.getenv('OPENAI_API_KEY')}")
-
 # Initialize Pinecone
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"), environment=os.getenv("PINECONE_ENVIRONMENT"))
 index_name = os.getenv("PINECONE_INDEX_NAME")
@@ -55,23 +49,33 @@ class Answer(BaseModel):
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile):
     contents = await file.read()
-    text = contents.decode('utf-8')
 
-    # Use a text loader to load the document
-    loader = TextLoader(text)
+    # Check file type and use the appropriate loader
+    if file.filename.endswith('.pdf'):
+        with open(f"/tmp/{file.filename}", "wb") as f:
+            f.write(contents)
+        loader = PyPDFLoader(f"/tmp/{file.filename}")
+    else:
+        text = contents.decode('utf-8')
+        loader = TextLoader(text)
+
     documents = loader.load()
+    print(documents)
 
     # Use a text splitter to split the documents into chunks
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     texts = text_splitter.split_documents(documents)
 
+
     embeddings = OpenAIEmbeddings(openai_api_key=openAIClient.api_key)
+
     vectorstore = PineconeVectorStore(index, embeddings, text_key="text")
 
-    for i, doc in enumerate(texts):
-        vectorstore.add_texts([(doc, {"text": doc, "metadata": f"{file.filename}_{i}"})])
 
-    return {"filename": file.filename, "message": "File uploaded and processed successfully."}
+    for i, doc in enumerate(texts):
+        vectorstore.add_texts([doc.page_content], [{"text": doc, "metadata": f"{file.filename}_{i}"}])
+
+    return Answer(answer=f"File {file.filename} uploaded and processed successfully.")
 
 @app.post("/ask", response_model=Answer)
 def ask_question(query: Query):
