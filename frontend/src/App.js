@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 import { Button, Input } from "@nextui-org/react";
+import ReactMarkdown from "react-markdown";
 
 function App() {
   const [question, setQuestion] = useState("");
@@ -56,34 +57,38 @@ function App() {
       <header className="App-header py-3">
         <h1>RAG System</h1>
       </header>
-      <main className="w-96 mx-auto py-5">
-        <div className="flex gap-3 mb-3">
-          <Input
-            type="text"
-            value={question}
-            onChange={handleQuestionChange}
-            placeholder="Ask a question..."
-          />
-          <Button onClick={handleAsk} color="primary" className="w-[100px]">
-            Ask
-          </Button>
-        </div>
-        <div className="flex gap-3 mb-3">
-          <Input
-            type="file"
-            onChange={handleFileChange}
-            accept=".txt,application/pdf"
-          />
-          <Button onClick={handleFileUpload} className="w-[100px]">
-            Upload File
-          </Button>
-        </div>
-        {answer && (
-          <div className="answer text-left">
-            <h2>Answer:</h2>
-            <p>{answer}</p>
+      <main className=" mx-auto py-5">
+        <div className="w-96 mx-auto">
+          <div className="flex gap-3 mb-3">
+            <Input
+              type="text"
+              value={question}
+              onChange={handleQuestionChange}
+              placeholder="Ask a question..."
+            />
+            <Button onClick={handleAsk} color="primary" className="w-[100px]">
+              Ask
+            </Button>
           </div>
-        )}
+          <div className="flex gap-3 mb-3">
+            <Input
+              type="file"
+              onChange={handleFileChange}
+              accept=".txt,application/pdf"
+            />
+            <Button onClick={handleFileUpload} className="w-[100px]">
+              Upload File
+            </Button>
+          </div>
+        </div>
+        <div className="max-w-5xl mx-auto">
+          {answer && (
+            <div className="answer text-left">
+              <h2>Answer:</h2>
+              <ReactMarkdown>{answer}</ReactMarkdown>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

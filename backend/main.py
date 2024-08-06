@@ -56,8 +56,9 @@ async def create_upload_file(file: UploadFile):
             f.write(contents)
         loader = PyPDFLoader(f"/tmp/{file.filename}")
     else:
-        text = contents.decode('utf-8')
-        loader = TextLoader(text)
+        with open(f"/tmp/{file.filename}", "w") as f:
+            f.write(contents.decode('utf-8'))
+        loader = TextLoader(f"/tmp/{file.filename}")
 
     documents = loader.load()
     print(documents)
@@ -95,6 +96,10 @@ def ask_question(query: Query):
           {
               "role": "system",
               "content": context_text
+          },
+          {
+              "role": "system",
+              "content": "search content only from doc, if you can't find related content just ask for related doc upload"
           },
           {
               "role": "user",
