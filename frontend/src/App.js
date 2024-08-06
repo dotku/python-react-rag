@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
+import { Button, Input } from "@nextui-org/react";
 
 function App() {
   const [question, setQuestion] = useState("");
@@ -51,24 +52,34 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="App-header py-3">
         <h1>RAG System</h1>
-        <input
-          type="text"
-          value={question}
-          onChange={handleQuestionChange}
-          placeholder="Ask a question..."
-        />
-        <button onClick={handleAsk}>Ask</button>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleFileUpload}>Upload File</button>
+      </header>
+      <main className="w-96 mx-auto py-5">
+        <div className="flex gap-3 mb-3">
+          <Input
+            type="text"
+            value={question}
+            onChange={handleQuestionChange}
+            placeholder="Ask a question..."
+          />
+          <Button onClick={handleAsk} color="primary" className="w-[100px]">
+            Ask
+          </Button>
+        </div>
+        <div className="flex gap-3 mb-3">
+          <Input type="file" onChange={handleFileChange} />
+          <Button onClick={handleFileUpload} className="w-[100px]">
+            Upload File
+          </Button>
+        </div>
         {answer && (
-          <div className="answer">
+          <div className="answer text-left">
             <h2>Answer:</h2>
             <p>{answer}</p>
           </div>
         )}
-      </header>
+      </main>
     </div>
   );
 }

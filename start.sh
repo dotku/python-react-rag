@@ -3,6 +3,7 @@
 # Set the project directories
 BACKEND_DIR="backend"
 FRONTEND_DIR="frontend"
+FASTAPI_PORT=8000
 
 # Load environment variables from .env.local
 if [ -f .env.local ]; then
