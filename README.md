@@ -1,5 +1,7 @@
 # Pthon React RAG
 
+![image](https://github.com/user-attachments/assets/5688d832-875d-4c26-b5aa-2944d78fdb66)
+
 ![screenshot](./assets/image.png)
 
 ## Preperation
