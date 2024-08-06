@@ -1,8 +1,11 @@
 # Pthon React RAG
 
+![screenshot](./assets/image.png)
+
 ## Preperation
 
 1. setup your pincone account and fill up the evn
+2. follow the script on `get started` to install and run the program
 
 ## Get Started
 
